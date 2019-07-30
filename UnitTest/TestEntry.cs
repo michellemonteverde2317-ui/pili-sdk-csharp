@@ -16,8 +16,8 @@ namespace UnitTest
         public string HUB_NAME = "";
 
         //配置文件的所在路径
-        private string setupFile = System.Environment.CurrentDirectory + "\\..\\..\\Qiniu_setup.ini";
-        //private string setupFile = @"e:\\Qiniu_setup.ini";
+        //private string setupFile = System.Environment.CurrentDirectory + "\\..\\..\\Qiniu_setup.ini";
+        private string setupFile = @"e:\\Qiniu_setup.ini";
         public TestEntry()
         {
             if (System.IO.File.Exists(this.setupFile))
