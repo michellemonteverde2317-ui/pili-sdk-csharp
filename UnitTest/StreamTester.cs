@@ -380,7 +380,7 @@ namespace UnitTest
         public void StreamList()
         {
             Credentials credentials = new Credentials(ACCESS_KEY, SECRET_KEY); // Credentials Object
-            Hub hub = new Hub(credentials, HUB_NAME+"_4");
+            Hub hub = new Hub(credentials, HUB_NAME);
             // List streams
             try
             {
