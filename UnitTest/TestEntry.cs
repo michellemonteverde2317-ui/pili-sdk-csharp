@@ -16,8 +16,8 @@ namespace UnitTest
         public string HUB_NAME = "";
 
         //配置文件的所在路径
-        //private string setupFile = System.Environment.CurrentDirectory + "\\..\\..\\Qiniu_setup.ini";
-        private string setupFile = @"e:\\Qiniu_setup.ini";
+        private string setupFile = System.Environment.CurrentDirectory + "\\..\\..\\Qiniu_setup.ini";
+        //private string setupFile = @"e:\\Qiniu_setup.ini";
         public TestEntry()
         {
             if (System.IO.File.Exists(this.setupFile))
@@ -28,6 +28,7 @@ namespace UnitTest
                 foreach(string row in text.Split('\n'))
                 {
                     if (string.Empty.Equals(row.Trim())) continue;
+                    if (row.Trim().StartsWith("//")) continue;
                     if (row.IndexOf("=") < 0) continue;
                     string key = row.Substring(0,row.IndexOf("=")).Trim();
                     string val = row.Substring(row.IndexOf("=")+1).Trim();

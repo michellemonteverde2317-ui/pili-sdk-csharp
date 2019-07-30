@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Qiniu_setup.ini" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\pili-sdk-csharp\pili-sdk-csharp.csproj">
