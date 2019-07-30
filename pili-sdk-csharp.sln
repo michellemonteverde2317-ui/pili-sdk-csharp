@@ -1,7 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.106
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pili-sdk-csharp", "pili-sdk-csharp\pili-sdk-csharp.csproj", "{AED2A63D-296C-4B6D-A0F1-C0CDBE612584}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{6D79316F-3553-4B6F-8C20-3D05564E2FEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,8 +17,15 @@ Global
 		{AED2A63D-296C-4B6D-A0F1-C0CDBE612584}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AED2A63D-296C-4B6D-A0F1-C0CDBE612584}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AED2A63D-296C-4B6D-A0F1-C0CDBE612584}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D79316F-3553-4B6F-8C20-3D05564E2FEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D79316F-3553-4B6F-8C20-3D05564E2FEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D79316F-3553-4B6F-8C20-3D05564E2FEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D79316F-3553-4B6F-8C20-3D05564E2FEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EE81CE9B-D20A-4C86-A0E6-8F4F66BDBB4B}
 	EndGlobalSection
 EndGlobal
