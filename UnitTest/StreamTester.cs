@@ -9,14 +9,20 @@ namespace UnitTest
     [TestClass]
     public class StreamTester : TestEntry
     {
+        //测试创建直播流所用的临时流名称
+        public string testStreamName = "weishakeji_stream";
+
+        /// <summary>
+        /// 创建流
+        /// </summary>
         [TestMethod]
         public void CreatStream()
         {
             Credentials credentials = new Credentials(ACCESS_KEY, SECRET_KEY); // Credentials Object
             Hub hub = new Hub(credentials, HUB_NAME);
             Console.WriteLine(hub.ToString());
-            // Create a new Stream
-            string title = null; // optional, auto-generated as default
+            //创建流
+            string title = testStreamName; // optional, auto-generated as default
             string publishKey = null; // optional, auto-generated as default
             string publishSecurity = null; // optional, can be "dynamic" or "static", "dynamic" as default
             Stream stream = null;
@@ -24,7 +30,68 @@ namespace UnitTest
             {
                 stream = hub.createStream(title, publishKey, publishSecurity);
                 //Trace.WriteLine("hub.createStream:");
-                Console.WriteLine(stream.toJsonString());  
+                Console.WriteLine(stream.toJsonString());
+            }
+            catch (PiliException e)
+            {
+                // TODO Auto-generated catch block
+                Console.WriteLine(e.ToString());
+                Console.Write(e.StackTrace);
+                Assert.Fail();
+            }
+        }
+        /// <summary>
+        /// 删除直播流
+        /// </summary>
+        [TestMethod]
+        public void DeleteStream()
+        {
+            
+        }
+        /// <summary>
+        /// 获取直播流信息
+        /// </summary>
+        [TestMethod]
+        public void GetStream()
+        {
+            Credentials credentials = new Credentials(ACCESS_KEY, SECRET_KEY); // Credentials Object
+            Hub hub = new Hub(credentials, HUB_NAME);
+            Stream stream = null;
+            try
+            {
+                stream = hub.getStream(testStreamName);
+                string json = stream.toJsonString();
+                /*
+                     {
+                          "id": "z1.liuhanlin.562f2b35d409d2aa48001102",
+                          "createdAt": "2015-10-27T07:43:49.756Z",
+                          "updatedAt": "2015-10-27T07:43:49.756Z",
+                          "title": "562f2b35d409d2aa48001102",
+                          "hub": "liuhanlin",
+                          "disabled": false,
+                          "publishKey": "9654c11a01b7b941",
+                          "publishSecurity": "static",
+                          "hosts": {
+                            "publish": {
+                              "rtmp": "100000p.publish.z1.pili.qiniup.com"
+                            },
+                            "live": {
+                              "hdl": "100000p.live1-hdl.z1.pili.qiniucdn.com",
+                              "hls": "100000p.live1-hls.z1.pili.qiniucdn.com",
+                              "http": "100000p.live1-hls.z1.pili.qiniucdn.com",
+                              "rtmp": "100000p.live1-rtmp.z1.pili.qiniucdn.com"
+                            },
+                            "playback": {
+                              "hls": "100000p.playback1.z1.pili.qiniucdn.com",
+                              "http": "100000p.playback1.z1.pili.qiniucdn.com"
+                            },
+                            "play": {
+                              "http": "100000p.live1-hls.z1.pili.qiniucdn.com",
+                              "rtmp": "100000p.live1-rtmp.z1.pili.qiniucdn.com"
+                            }
+                          }
+                        }
+                     */
             }
             catch (PiliException e)
             {
@@ -32,7 +99,13 @@ namespace UnitTest
                 Console.WriteLine(e.ToString());
                 Console.Write(e.StackTrace);
             }
-
+        }
+        [TestMethod]
+        public void _CreatStream()
+        {
+            Credentials credentials = new Credentials(ACCESS_KEY, SECRET_KEY); // Credentials Object
+            Hub hub = new Hub(credentials, HUB_NAME);
+            Stream stream = null;
             try
             {
                 stream = hub.getStream(stream.StreamId);
@@ -381,7 +454,6 @@ namespace UnitTest
         {
             Credentials credentials = new Credentials(ACCESS_KEY, SECRET_KEY); // Credentials Object
             Hub hub = new Hub(credentials, HUB_NAME);
-            // List streams
             try
             {
                 string marker = null; // optional
@@ -399,6 +471,7 @@ namespace UnitTest
             }
             catch (PiliException e)
             {
+                Assert.Fail();
                 throw e;
             }
         }

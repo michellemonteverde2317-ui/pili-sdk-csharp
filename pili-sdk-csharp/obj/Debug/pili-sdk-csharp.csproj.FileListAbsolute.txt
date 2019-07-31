@@ -19,3 +19,4 @@ E:\SourceCode\pili-sdk-csharp\pili-sdk-csharp\obj\Debug\pili-sdk-csharp.csproj.C
 E:\SourceCode\pili-sdk-csharp\pili-sdk-csharp\obj\Debug\pili-sdk-csharp.csproj.CopyComplete
 E:\SourceCode\pili-sdk-csharp\pili-sdk-csharp\obj\Debug\pili-sdk-csharp.dll
 E:\SourceCode\pili-sdk-csharp\pili-sdk-csharp\obj\Debug\pili-sdk-csharp.pdb
+E:\SourceCode\pili-sdk-csharp\pili-sdk-csharp\obj\Debug\pili-sdk-csharp.csprojAssemblyReference.cache

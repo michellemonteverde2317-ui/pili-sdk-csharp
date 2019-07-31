@@ -51,8 +51,6 @@ namespace pili_sdk_csharp.pili_qiniu
             // Host: <Host>
             sb.Append(string.Format("\nHost: {0}", url.Host));
 
-
-
             if (url.Port != 80)
             {
                 sb.Append(string.Format(":{0}", url.Port));

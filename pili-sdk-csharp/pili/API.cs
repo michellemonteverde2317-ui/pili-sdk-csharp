@@ -21,7 +21,10 @@ namespace pili_sdk_csharp.pili
 
     public class API
     {
-        private static readonly string API_BASE_URL = string.Format("{0}://{1}/{2}", Configuration.Instance.USE_HTTPS ? "https" : "http", Configuration.Instance.API_HOST, Configuration.Instance.API_VERSION);
+        private static readonly string API_BASE_URL = string.Format("{0}://{1}/{2}", 
+            Configuration.Instance.USE_HTTPS ? "https" : "http", 
+            Configuration.Instance.API_HOST, 
+            Configuration.Instance.API_VERSION);
 
         private static HttpWebRequest mOkHttpClient;
 
@@ -29,27 +32,26 @@ namespace pili_sdk_csharp.pili
         public static Stream createStream(Credentials credentials, string hubName, string title, string publishKey, string publishSecurity)
         {
             //  System.out.println("createStream:" + API_BASE_URL);
-            string urlStr = API_BASE_URL + "/streams";
-            Console.WriteLine("API_BASE_URL---------" + API_BASE_URL);
-
+            //string urlStr = API_BASE_URL + "/streams";
+            string urlStr = string.Format("{0}/hubs/{1}/streams", API_BASE_URL, hubName);
             Dictionary<string, string> json = new Dictionary<string, string>();
-            json.Add("hub", hubName);
+            //json.Add("hub", hubName);
             if (Utils.isArgNotEmpty(title))
             {
                 if (title.Length < Config.TITLE_MIN_LENGTH || title.Length > Config.TITLE_MAX_LENGTH)
                 {
                     throw new PiliException(MessageConfig.ILLEGAL_TITLE_MSG);
                 }
-                json.Add("title", title);
+                json.Add("key", title);
             }
-            if (Utils.isArgNotEmpty(publishKey))
-            {
-                json.Add("publishKey", publishKey);
-            }
-            if (Utils.isArgNotEmpty(publishSecurity))
-            {
-                json.Add("publishSecurity", publishSecurity);
-            }
+            //if (Utils.isArgNotEmpty(publishKey))
+            //{
+            //    json.Add("publishKey", publishKey);
+            //}
+            //if (Utils.isArgNotEmpty(publishSecurity))
+            //{
+            //    json.Add("publishSecurity", publishSecurity);
+            //}
             HttpWebResponse response = null;
             try
             {
@@ -102,14 +104,23 @@ namespace pili_sdk_csharp.pili
             }
         }
 
-        // Get an exist stream
-        public static Stream getStream(Credentials credentials, string streamId)
+        /// <summary>
+        ///  Get an exist stream
+        /// </summary>
+        /// <param name="credentials"></param>
+        /// <param name="hubName">直播空间名称</param>
+        /// <param name="streamId">直播流名称</param>
+        /// <returns></returns>
+        public static Stream getStream(Credentials credentials,string hubName, string streamId)
         {
             if (streamId == null)
             {
                 throw new PiliException(MessageConfig.NULL_STREAM_ID_EXCEPTION_MSG);
             }
-            string urlStr = string.Format("{0}/streams/{1}", API_BASE_URL, streamId);
+            string urlStr = string.Format("{0}/hubs/{1}/streams/{2}", 
+                API_BASE_URL, 
+                hubName,
+                UrlSafeBase64.encodeToString(streamId));
             HttpWebResponse response = null;
             try
             {
@@ -117,15 +128,14 @@ namespace pili_sdk_csharp.pili
                 mOkHttpClient = (HttpWebRequest)HttpWebRequest.Create(url);
                 mOkHttpClient.Method = WebRequestMethods.Http.Get;
                 string macToken = credentials.signRequest(url, "GET", null, null);
-                mOkHttpClient.UserAgent = Utils.UserAgent;
                 mOkHttpClient.Headers.Add("Authorization", macToken);
+                mOkHttpClient.UserAgent = Utils.UserAgent;
+                mOkHttpClient.ContentType = "application/x-www-form-urlencoded";                
                 response = (HttpWebResponse)mOkHttpClient.GetResponse();
 
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
-                Console.Write(e.StackTrace);
                 throw new PiliException(e);
             }
             // response never be null
@@ -140,8 +150,6 @@ namespace pili_sdk_csharp.pili
                 }
                 catch (IOException e)
                 {
-                    Console.WriteLine(e.ToString());
-                    Console.Write(e.StackTrace);
                     throw new PiliException(e);
                 }
             }
@@ -151,38 +159,52 @@ namespace pili_sdk_csharp.pili
             }
         }
 
-        // List stream
-        public static StreamList listStreams(Credentials credentials, string hubName, string startMarker, long limitCount, string titlePrefix)
+        /// <summary>
+        /// 查询直播流列表
+        /// </summary>
+        /// <param name="credentials"></param>
+        /// <param name="hubName">直播空间名称</param>
+        /// <param name="liveonly">true 表示查询的是正在直播的流，不指定表示返回所有的流。</param>
+        /// <param name="prefix">限定只返回带以 prefix 为前缀的流名，不指定表示不限定前缀</param>
+        /// <param name="limit">限定返回的流个数，不指定表示遵从系统限定的最大个数</param>
+        /// <param name="marker">上一次查询返回的标记，用于提示服务端从上一次查到的位置继续查询，不指定表示从头查询</param>
+        /// <returns></returns>
+        public static StreamList listStreams(Credentials credentials, string hubName,bool? liveonly, string prefix, long limit, string marker)
         {
             try
             {
                 System.Text.Encoding encoding = System.Text.Encoding.UTF8;
-
                 hubName = System.Web.HttpUtility.UrlEncode(hubName);
-                if (Utils.isArgNotEmpty(startMarker))
+                if (Utils.isArgNotEmpty(marker))
                 {
-                    startMarker = System.Web.HttpUtility.UrlEncode(startMarker);
+                    marker = System.Web.HttpUtility.UrlEncode(marker);
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
-                Console.Write(e.StackTrace);
-                throw new PiliException(e);
+                throw e;
             }
-            string urlStr = string.Format("{0}/streams?hub={1}", API_BASE_URL, hubName);
-            if (Utils.isArgNotEmpty(startMarker))
+            ///v2/hubs/<Hub>/streams?liveonly=<true>&prefix=<Prefix>&limit=<Limit>&marker=<Marker>
+            string urlStr = string.Format("{0}/hubs/{1}/streams", API_BASE_URL, hubName);
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            if (liveonly != null)
+                dic.Add("liveonly", ((bool)liveonly).ToString().ToLower());
+            if (Utils.isArgNotEmpty(prefix))
+                dic.Add("prefix", prefix);
+            if (limit > 0)
+                dic.Add("limit", limit.ToString());
+            if (Utils.isArgNotEmpty(marker))
+                dic.Add("marker", marker);
+            if (dic.Count > 0)
             {
-                urlStr += "&marker=" + startMarker;
-            }
-            if (limitCount > 0)
-            {
-                urlStr += "&limit=" + limitCount;
-            }
-            if (Utils.isArgNotEmpty(titlePrefix))
-            {
-                urlStr += "&title=" + titlePrefix;
-            }
+                List<string> test = new List<string>(dic.Keys);
+                for (int i = 0; i < test.Count; i++)
+                {
+                    if (i == 0) urlStr += "?";
+                    if (i > 0) urlStr += "&";
+                    urlStr += test[i]+"="+dic[test[i]];
+                }
+            } 
             HttpWebResponse response = null;
             try
             {
@@ -192,6 +214,7 @@ namespace pili_sdk_csharp.pili
                 mOkHttpClient.Method = WebRequestMethods.Http.Get;
                 mOkHttpClient.UserAgent = Utils.UserAgent;
                 mOkHttpClient.Headers.Add("Authorization", macToken);
+                mOkHttpClient.ContentType = "application/x-www-form-urlencoded";
                 response = (HttpWebResponse)mOkHttpClient.GetResponse();
             }
             catch (Exception e)
