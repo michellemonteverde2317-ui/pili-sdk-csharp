@@ -48,3 +48,6 @@ UnitTest/bin/Debug/*.pdb
 /UnitTest/bin/Debug/pili-sdk-csharp.pdb
 /pili-sdk-csharp/bin/Debug/pili-sdk-csharp.dll
 /pili-sdk-csharp/bin/Debug/pili-sdk-csharp.pdb
+/pili-sdk-csharp/obj/Debug/pili-sdk-csharp.dll
+/pili-sdk-csharp/obj/Debug/pili-sdk-csharp.pdb
+/UnitTest/obj/Debug/UnitTest.csprojAssemblyReference.cache
