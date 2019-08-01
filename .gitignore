@@ -51,3 +51,4 @@ UnitTest/bin/Debug/*.pdb
 /pili-sdk-csharp/obj/Debug/pili-sdk-csharp.dll
 /pili-sdk-csharp/obj/Debug/pili-sdk-csharp.pdb
 /UnitTest/obj/Debug/UnitTest.csprojAssemblyReference.cache
+/pili-sdk-csharp/obj/Debug/pili-sdk-csharp.csproj.FileListAbsolute.txt
