@@ -30,9 +30,7 @@ namespace pili_sdk_csharp.pili_qiniu
             }
             catch (Exception e)
             {
-                // TODO Auto-generated catch block
-                Console.WriteLine(e.ToString());
-                Console.Write(e.StackTrace);
+                throw e;
             }
         }
 
@@ -50,6 +48,8 @@ namespace pili_sdk_csharp.pili_qiniu
 
             // Host: <Host>
             sb.Append(string.Format("\nHost: {0}", url.Host));
+
+
 
             if (url.Port != 80)
             {

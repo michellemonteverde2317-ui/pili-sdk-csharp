@@ -23,6 +23,7 @@ obj/*.*
 *.log
 *.zip
 *.rar
+*.dll
 [Bb]in
 [Dd]ebug*/
 *.lib
@@ -34,7 +35,16 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 .vs/
 #Nuget packages folder
-
+UnitTest/bin/Debug/*.dll
+UnitTest/bin/Debug/*.pdb
 ~$*.*
 /*.suo
 
+/pili-sdk-csharp/bin/Debug/pili-sdk-csharp.dll
+/pili-sdk-csharp/obj/Debug/pili-sdk-csharp.dll
+/UnitTest/bin/Debug/pili-sdk-csharp.dll
+/UnitTest/bin/Debug/pili-sdk-csharp.pdb
+/UnitTest/bin/Debug/pili-sdk-csharp.dll
+/UnitTest/bin/Debug/pili-sdk-csharp.pdb
+/pili-sdk-csharp/bin/Debug/pili-sdk-csharp.dll
+/pili-sdk-csharp/bin/Debug/pili-sdk-csharp.pdb

@@ -43,7 +43,7 @@ namespace pili_sdk_csharp.pili
 
         public PiliException(Exception e)
         {
-            this.response = null;
+            this.response = null;            
         }
 
         public virtual int code()

@@ -16,13 +16,13 @@ namespace UnitTest
         /// 创建流
         /// </summary>
         [TestMethod]
-        public void CreatStream()
+        public void Hub_CreatStream()
         {
             Credentials credentials = new Credentials(ACCESS_KEY, SECRET_KEY); // Credentials Object
             Hub hub = new Hub(credentials, HUB_NAME);
             Console.WriteLine(hub.ToString());
             //创建流
-            string title = testStreamName; // optional, auto-generated as default
+            string title = null; // optional, auto-generated as default
             string publishKey = null; // optional, auto-generated as default
             string publishSecurity = null; // optional, can be "dynamic" or "static", "dynamic" as default
             Stream stream = null;
@@ -44,22 +44,56 @@ namespace UnitTest
         /// 删除直播流
         /// </summary>
         [TestMethod]
-        public void DeleteStream()
-        {
-            
-        }
-        /// <summary>
-        /// 获取直播流信息
-        /// </summary>
-        [TestMethod]
-        public void GetStream()
+        public void Stream_Delete()
         {
             Credentials credentials = new Credentials(ACCESS_KEY, SECRET_KEY); // Credentials Object
             Hub hub = new Hub(credentials, HUB_NAME);
             Stream stream = null;
             try
             {
-                stream = hub.getStream(testStreamName);
+                stream = hub.getStream("z1." + HUB_NAME + ".weishakeji_stream");
+                string json = stream.toJsonString();
+            }
+            catch (PiliException e)
+            {
+                // TODO Auto-generated catch block
+                Console.WriteLine(e.ToString());
+                Console.Write(e.StackTrace);
+            }
+            if (stream != null)
+            {
+                try
+                {
+                    string res = stream.delete();
+                    Console.WriteLine("Stream delete()");
+                    Console.WriteLine(res);
+                    // No Content
+                }
+                catch (PiliException e)
+                {
+                    // TODO Auto-generated catch block
+                    Console.WriteLine(e.ToString());
+                    Console.Write(e.StackTrace);
+                }
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
+        /// <summary>
+        /// 获取直播流信息
+        /// </summary>
+        [TestMethod]
+        public void Hub_GetStream()
+        {
+            Credentials credentials = new Credentials(ACCESS_KEY, SECRET_KEY); // Credentials Object
+            Hub hub = new Hub(credentials, HUB_NAME);
+            Stream stream = null;
+            try
+            {
+                stream = hub.getStream("z1."+HUB_NAME+ ".5d4016f3bad7cf3fe7920d7a");
                 string json = stream.toJsonString();
                 /*
                      {
@@ -450,7 +484,7 @@ namespace UnitTest
         /// 获取流的列表
         /// </summary>
         [TestMethod]
-        public void StreamList()
+        public void Hub_ListStreams()
         {
             Credentials credentials = new Credentials(ACCESS_KEY, SECRET_KEY); // Credentials Object
             Hub hub = new Hub(credentials, HUB_NAME);
