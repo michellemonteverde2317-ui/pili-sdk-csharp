@@ -123,9 +123,7 @@ namespace pili_sdk_csharp.pili
 
             }
             catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-                Console.Write(e.StackTrace);
+            {               
                 throw new PiliException(e);
             }
             // response never be null

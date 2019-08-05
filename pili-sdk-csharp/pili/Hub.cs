@@ -9,6 +9,7 @@ namespace pili_sdk_csharp.pili
     public class Hub
     {
 
+        #region 构造方法
         private Credentials mCredentials;
         private string mHubName;
         public Hub(Credentials credentials, string hubName)
@@ -24,7 +25,18 @@ namespace pili_sdk_csharp.pili
             mCredentials = credentials;
             mHubName = hubName;
         }
+        public Hub(string accessKey, string secretKey, string hubName)
+        {
+            mCredentials = new Credentials(accessKey, secretKey);
+            mHubName = hubName;
+        }
 
+        public static Hub Create(string accessKey, string secretKey, string hubName)
+        {
+            Hub hub = new Hub(accessKey, secretKey, hubName);
+            return hub;
+        }
+        #endregion
 
         public virtual Stream createStream()
         {

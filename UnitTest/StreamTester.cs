@@ -18,11 +18,10 @@ namespace UnitTest
         [TestMethod]
         public void Hub_CreatStream()
         {
-            Credentials credentials = new Credentials(ACCESS_KEY, SECRET_KEY); // Credentials Object
-            Hub hub = new Hub(credentials, HUB_NAME);
-            Console.WriteLine(hub.ToString());
+
+            Hub hub = Hub.Create(ACCESS_KEY, SECRET_KEY, HUB_NAME);
             //创建流
-            string title = null; // optional, auto-generated as default
+            string title = testStreamName; // optional, auto-generated as default
             string publishKey = null; // optional, auto-generated as default
             string publishSecurity = null; // optional, can be "dynamic" or "static", "dynamic" as default
             Stream stream = null;
@@ -34,9 +33,6 @@ namespace UnitTest
             }
             catch (PiliException e)
             {
-                // TODO Auto-generated catch block
-                Console.WriteLine(e.ToString());
-                Console.Write(e.StackTrace);
                 Assert.Fail();
             }
         }
@@ -46,12 +42,11 @@ namespace UnitTest
         [TestMethod]
         public void Stream_Delete()
         {
-            Credentials credentials = new Credentials(ACCESS_KEY, SECRET_KEY); // Credentials Object
-            Hub hub = new Hub(credentials, HUB_NAME);
+            Hub hub = Hub.Create(ACCESS_KEY, SECRET_KEY, HUB_NAME);
             Stream stream = null;
             try
             {
-                stream = hub.getStream("z1." + HUB_NAME + ".weishakeji_stream");
+                stream = hub.getStream("z1." + HUB_NAME + "."+ testStreamName);
                 string json = stream.toJsonString();
             }
             catch (PiliException e)
@@ -81,19 +76,81 @@ namespace UnitTest
                 Assert.Fail();
             }
         }
+        [TestMethod]
+        public void Stream_saveas()
+        {
+            Hub hub = Hub.Create(ACCESS_KEY, SECRET_KEY, HUB_NAME);
+            Stream stream = null;           
 
+            string saveAsFormat = "mp4"; // required
+            string saveAsName = "videoName" + "." + saveAsFormat; // required
+            //long saveAsStart = 1444897613; // required, in second, unix timestampstart:1444897613,end:1444897973
+            //long saveAsEnd = 1444897973; // required, in second, unix timestamp
+            //string saveAsNotifyUrl = null; // optional
+            try
+            {
+                stream = hub.getStream("z1." + HUB_NAME + "." + testStreamName);
+                Stream.Status status = stream.status();
+
+                Stream.SaveAsResponse response = stream.saveAs(saveAsName, saveAsFormat);
+                Console.WriteLine("Stream saveAs()");
+                Console.WriteLine(response.ToString());
+                /*
+				 {
+				     "url":"http://ey636h.vod1.z1.pili.qiniucdn.com/recordings/z1.test-hub.55d81a72e3ba5723280000ec/videoName.m3u8",
+				     "targetUrl":"http://ey636h.vod1.z1.pili.qiniucdn.com/recordings/z1.test-hub.55d81a72e3ba5723280000ec/videoName.mp4",
+				     "persistentId":"z1.55d81c6c7823de5a49ad77b3"
+				 }
+				*/
+            }
+            catch (PiliException e)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void Sream_Snapshot()
+        {
+            Hub hub = Hub.Create(ACCESS_KEY, SECRET_KEY, HUB_NAME);
+            Stream stream = null;
+
+            string format = "jpg"; // required
+            string name = "imageName" + "." + format; // required
+            long time = 0; // optional, in second, unix timestamp
+            string notifyUrl = null; // optional
+
+            try
+            {
+                stream = hub.getStream("z1." + HUB_NAME + "." + testStreamName);
+                Stream.SnapshotResponse response = stream.snapshot(name, format, time, notifyUrl);
+                Console.WriteLine("Stream snapshot()");
+                Console.WriteLine(response.ToString());
+                /*
+                 {
+                     "targetUrl":"http://ey636h.static1.z0.pili.qiniucdn.com/snapshots/z1.test-hub.55d81a72e3ba5723280000ec/imageName.jpg",
+                     "persistentId":"z1.55d81c247823de5a49ad729c"
+                 }
+                 */
+            }
+            catch (PiliException e)
+            {
+                // TODO Auto-generated catch block
+                Console.WriteLine(e.ToString());
+                Console.Write(e.StackTrace);
+            }
+        }
         /// <summary>
         /// 获取直播流信息
         /// </summary>
         [TestMethod]
         public void Hub_GetStream()
         {
-            Credentials credentials = new Credentials(ACCESS_KEY, SECRET_KEY); // Credentials Object
-            Hub hub = new Hub(credentials, HUB_NAME);
+            Hub hub = Hub.Create(ACCESS_KEY, SECRET_KEY, HUB_NAME);
             Stream stream = null;
             try
             {
-                stream = hub.getStream("z1."+HUB_NAME+ ".5d4016f3bad7cf3fe7920d7a");
+                stream = hub.getStream("z1."+HUB_NAME+ ".");
                 string json = stream.toJsonString();
                 /*
                      {
