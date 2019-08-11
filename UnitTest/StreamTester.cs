@@ -10,7 +10,7 @@ namespace UnitTest
     public class StreamTester : TestEntry
     {
         //测试创建直播流所用的临时流名称
-        public string testStreamName = "weishakeji_stream";
+        public string testStreamName = "weishakeji";
 
         /// <summary>
         /// 创建流
@@ -150,7 +150,7 @@ namespace UnitTest
             Stream stream = null;
             try
             {
-                stream = hub.getStream("z1."+HUB_NAME+ ".");
+                stream = hub.getStream("z1."+HUB_NAME+ "."+ testStreamName);
                 string json = stream.toJsonString();
                 /*
                      {
@@ -189,6 +189,64 @@ namespace UnitTest
                 // TODO Auto-generated catch block
                 Console.WriteLine(e.ToString());
                 Console.Write(e.StackTrace);
+            }
+        }
+        [TestMethod]
+        public void Hub_GetStream2()
+        {
+            Hub hub = Hub.Create(ACCESS_KEY, SECRET_KEY, HUB_NAME);
+            Stream stream = null;
+            try
+            {
+                string marker = null; // optional
+                long limit = 2; // optional
+                string titlePrefix = null; // optional
+                Stream.StreamList streamList = hub.listStreams(marker, limit, titlePrefix);
+                while (stream == null && streamList.Streams.Count > 0)
+                {
+                    //streamList = hub.listStreams(marker, limit, titlePrefix);
+                    IList<Stream> list = streamList.Streams;
+                    foreach (Stream s in list)
+                    {
+                        if (s.StreamId.EndsWith("." + HUB_NAME + "." + testStreamName))
+                        {
+                            stream = s;
+                            break;
+                        }
+                    }
+                    if (stream == null)
+                    {
+                        streamList = hub.listStreams(streamList.Marker, limit, titlePrefix);
+                    }
+                }
+
+            }
+            catch (PiliException e)
+            {
+                Assert.Fail();
+            }
+        }
+        [TestMethod]
+        public void Hub_GetStreamActivity()
+        {
+            Hub hub = Hub.Create(ACCESS_KEY, SECRET_KEY, HUB_NAME);
+            List<Stream> list = new List<Stream>();
+            try
+            {
+                string marker = null; // optional
+                long limit = 0; // optional
+                string titlePrefix = null; // optional
+                Stream.StreamList streamList = hub.listStreams(marker, limit, titlePrefix,null);
+                IList<Stream> streams = streamList.Streams;
+                foreach (Stream s in streams)
+                {
+                    Stream.Status status = s.status();
+                    
+                }
+            }
+            catch (PiliException e)
+            {
+                Assert.Fail();
             }
         }
         [TestMethod]
@@ -552,6 +610,32 @@ namespace UnitTest
                 string titlePrefix = null; // optional
 
                 Stream.StreamList streamList = hub.listStreams(marker, limit, titlePrefix);
+                Console.WriteLine("hub.listStreams()");
+                Console.WriteLine("marker:" + streamList.Marker);
+                IList<Stream> list = streamList.Streams;
+                foreach (Stream s in list)
+                {
+                    // access the stream
+                }
+            }
+            catch (PiliException e)
+            {
+                Assert.Fail();
+                throw e;
+            }
+        }
+        [TestMethod]
+        public void Hub_ListStreamsActivity()
+        {
+            Credentials credentials = new Credentials(ACCESS_KEY, SECRET_KEY); // Credentials Object
+            Hub hub = new Hub(credentials, HUB_NAME);
+            try
+            {
+                string marker = null; // optional
+                long limit = 0; // optional
+                string titlePrefix = null; // optional
+
+                Stream.StreamList streamList = hub.listStreams(marker, limit, titlePrefix,true);
                 Console.WriteLine("hub.listStreams()");
                 Console.WriteLine("marker:" + streamList.Marker);
                 IList<Stream> list = streamList.Streams;

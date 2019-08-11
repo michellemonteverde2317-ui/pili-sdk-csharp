@@ -56,21 +56,24 @@ namespace pili_sdk_csharp.pili
 
         public virtual StreamList listStreams()
         {
-            return API.listStreams(mCredentials, mHubName, null, 0, null);
+            return API.listStreams(mCredentials, mHubName, null, 0, null,null);
         }
 
 
         public virtual StreamList listStreams(string marker, long limit)
         {
-            return API.listStreams(mCredentials, mHubName, marker, limit, null);
+            return API.listStreams(mCredentials, mHubName, marker, limit, null,null);
         }
 
 
         public virtual StreamList listStreams(string marker, long limit, string titlePrefix)
         {
-            return API.listStreams(mCredentials, mHubName, marker, limit, titlePrefix);
+            return API.listStreams(mCredentials, mHubName, marker, limit, titlePrefix,null);
         }
-
+        public virtual StreamList listStreams(string marker, long limit, string titlePrefix,bool? liveonly)
+        {
+            return API.listStreams(mCredentials, mHubName, marker, limit, titlePrefix, liveonly);
+        }
     }
 
 }

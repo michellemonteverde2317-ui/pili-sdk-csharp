@@ -21,7 +21,10 @@ namespace pili_sdk_csharp.pili
 
     public class API
     {
-        private static readonly string API_BASE_URL = string.Format("{0}://{1}/{2}", Configuration.Instance.USE_HTTPS ? "https" : "http", Configuration.Instance.API_HOST, Configuration.Instance.API_VERSION);
+        private static readonly string API_BASE_URL = string.Format("{0}://{1}/{2}", 
+            Configuration.Instance.USE_HTTPS ? "https" : "http",
+            Configuration.Instance.API_HOST, 
+            Configuration.Instance.API_VERSION);
 
         private static HttpWebRequest mOkHttpClient;
 
@@ -150,7 +153,7 @@ namespace pili_sdk_csharp.pili
         }
 
         // List stream
-        public static StreamList listStreams(Credentials credentials, string hubName, string startMarker, long limitCount, string titlePrefix)
+        public static StreamList listStreams(Credentials credentials, string hubName, string startMarker, long limitCount, string titlePrefix, bool? liveonly)
         {
             try
             {
@@ -180,6 +183,10 @@ namespace pili_sdk_csharp.pili
             if (Utils.isArgNotEmpty(titlePrefix))
             {
                 urlStr += "&title=" + titlePrefix;
+            }
+            if (liveonly!=null)
+            {
+                urlStr += "&status=connected";
             }
             HttpWebResponse response = null;
             try

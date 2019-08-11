@@ -1,4 +1,7 @@
-# Pili Streaming Cloud server-side library for csharp
+﻿# Pili Streaming Cloud server-side library for csharp
+
+## 前言
+七牛云的云直播服务端SDK，参看 https://github.com/pili-engineering/pili-sdk-csharp，官方提供的SDK是基于v1版的接口编写；而七牛云官方网站的开发文档确是v2版的。
 
 ## Features
 
